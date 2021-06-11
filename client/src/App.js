@@ -5,7 +5,6 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import axios from "axios";
 
 // Components
 import Login from "./components/Login";
@@ -13,11 +12,10 @@ import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
 
 // Services
+import verifyService from "./services/verify";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  console.log("auth status", isAuthenticated);
 
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
@@ -25,11 +23,11 @@ function App() {
 
   async function isAuth() {
     try {
-      const response = await axios.get("http://localhost:5000/auth/is-verify", {
+      const config = {
         headers: { token: localStorage.token },
-      });
+      };
+      const response = await verifyService(config);
 
-      console.log("parseRes", response);
       response === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
     } catch (err) {
       console.error(err.message);

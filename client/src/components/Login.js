@@ -3,10 +3,12 @@ import "twin.macro";
 import { Link } from "react-router-dom";
 import loginService from "../services/login";
 import { useField } from "../hooks";
+import { useState } from "react";
 
 const Login = ({ setAuth }) => {
   const email = useField("email", "email");
   const password = useField("password", "password");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const { clearState: emailClearState, ...emailFieldProps } = email;
   const { clearState: passwordClearState, ...passwordFieldProps } = password;
@@ -17,6 +19,7 @@ const Login = ({ setAuth }) => {
     const credentials = {
       email: email.value,
       password: password.value,
+      isRemembered: rememberMe,
     };
 
     try {
@@ -33,6 +36,10 @@ const Login = ({ setAuth }) => {
     } catch (err) {
       console.error("error", err.message);
     }
+  };
+
+  const handleCheckbox = () => {
+    setRememberMe(true);
   };
   return (
     <div tw="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -85,6 +92,7 @@ const Login = ({ setAuth }) => {
                   id="remember_me"
                   name="remember_me"
                   type="checkbox"
+                  onChange={handleCheckbox}
                   tw="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                 />
                 <label
