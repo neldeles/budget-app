@@ -2,6 +2,7 @@ const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
+const authorization = require("../middleware/authorization");
 
 // registering
 router.post("/register", async (req, res) => {
@@ -31,7 +32,7 @@ router.post("/register", async (req, res) => {
     );
 
     // 5. generating our jwt token
-    const token = jwtGenerator(newUser.rows[0].id);
+    const token = jwtGenerator(newUser.rows[0].id, "1hr");
 
     res.json({ token });
   } catch (err) {
@@ -45,7 +46,7 @@ router.post("/login", async (req, res) => {
   try {
     const errorMessage = "password or email is incorrect";
     // 1. Destructure the request body
-    const { email, password } = req.body;
+    const { email, password, isRemembered } = req.body;
 
     // 2. check if user doesn't exist
     const user = await pool.query("select * from users where email = $1", [
@@ -64,9 +65,24 @@ router.post("/login", async (req, res) => {
     }
 
     // 4. give them the jwt token
-    const token = jwtGenerator(user.rows[0].id);
+    if (isRemembered) {
+      const token = jwtGenerator(user.rows[0].id, "30d");
+      console.log("cookie set to 30 days");
+      res.json({ token });
+    } else {
+      const token = jwtGenerator(user.rows[0].id, "1hr");
+      console.log("cookie set to 1 hour");
+      res.json({ token });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json("server error");
+  }
+});
 
-    res.json({ token });
+router.get("/is-verify", authorization, async (req, res) => {
+  try {
+    res.json(true);
   } catch (err) {
     console.error(err.message);
     res.status(500).json("server error");
