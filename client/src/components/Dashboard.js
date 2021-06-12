@@ -1,29 +1,43 @@
 /** @jsxImportSource @emotion/react */
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
-  CalendarIcon,
   ChartBarIcon,
   FolderIcon,
   HomeIcon,
-  InboxIcon,
   MenuIcon,
-  UsersIcon,
   XIcon,
 } from "@heroicons/react/outline";
 import tw from "twin.macro";
 
+// Services
+import dashboardService from "../services/dashboard";
+
 const navigation = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Team", href: "#", icon: UsersIcon, current: false },
-  { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  { name: "Documents", href: "#", icon: InboxIcon, current: false },
+  { name: "Budget", href: "#", icon: HomeIcon, current: true },
   { name: "Reports", href: "#", icon: ChartBarIcon, current: false },
+  { name: "Wallets", href: "#", icon: FolderIcon, current: false },
 ];
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [user, setUser] = useState({});
+
+  async function fetchUser() {
+    try {
+      const config = {
+        headers: { token: localStorage.token },
+      };
+      const response = await dashboardService(config);
+      setUser(response);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <div tw="h-screen flex overflow-hidden bg-gray-100">
@@ -121,7 +135,7 @@ const Dashboard = () => {
                     </div>
                     <div tw="ml-3">
                       <p tw="text-base font-medium text-gray-700 group-hover:text-gray-900">
-                        Tom Cook
+                        {user.name}
                       </p>
                       <p tw="text-sm font-medium text-gray-500 group-hover:text-pink-700">
                         View profile
@@ -145,11 +159,7 @@ const Dashboard = () => {
           <div tw="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
             <div tw="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div tw="flex items-center flex-shrink-0 px-4">
-                <img
-                  tw="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-                  alt="Workflow"
-                />
+                <span tw="font-medium text-2xl">My Budget App </span>
               </div>
               <nav tw="mt-5 flex-1 px-2 bg-white space-y-1">
                 {navigation.map((item) => (
@@ -191,10 +201,10 @@ const Dashboard = () => {
                   </div>
                   <div tw="ml-3">
                     <p tw="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                      Tom Cook
+                      {user.name}
                     </p>
                     <p tw="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-                      View profile
+                      Logout
                     </p>
                   </div>
                 </div>
