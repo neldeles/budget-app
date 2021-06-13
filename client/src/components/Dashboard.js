@@ -13,10 +13,38 @@ import tw from "twin.macro";
 // Services
 import dashboardService from "../services/dashboard";
 
+// Components
+import Header from "./Header";
+import Table from "./Table";
+
 const navigation = [
   { name: "Budget", href: "#", icon: HomeIcon, current: true },
   { name: "Reports", href: "#", icon: ChartBarIcon, current: false },
   { name: "Wallets", href: "#", icon: FolderIcon, current: false },
+];
+
+const data = [
+  {
+    category: "Electricity",
+    budgeted: 0,
+    activity: 0,
+    availalble: 0,
+    id: 1,
+  },
+  {
+    category: "Electricity",
+    budgeted: 0,
+    activity: 0,
+    availalble: 0,
+    id: 2,
+  },
+  {
+    category: "Electricity",
+    budgeted: 0,
+    activity: 0,
+    availalble: 0,
+    id: 3,
+  },
 ];
 
 const Dashboard = () => {
@@ -225,15 +253,12 @@ const Dashboard = () => {
         </div>
         <main tw="flex-1 relative z-0 overflow-y-auto focus:outline-none">
           <div tw="py-6">
-            <div tw="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              <h1 tw="text-2xl font-semibold text-gray-900">Dashboard</h1>
-            </div>
-            <div tw="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              {/* Replace with your content */}
-              <div tw="py-4">
-                <div tw="border-4 border-dashed border-gray-200 rounded-lg h-96" />
-              </div>
-              {/* /End replace */}
+            <Header />
+            <div tw="max-w-7xl mx-auto px-4 my-4 sm:px-6 md:px-8">
+              <Table
+                cols={["category", "budgeted", "activity", "available"]}
+                data={data}
+              />
             </div>
           </div>
         </main>
