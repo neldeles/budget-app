@@ -47,7 +47,7 @@ const data = [
   },
 ];
 
-const Dashboard = () => {
+const Dashboard = ({ setAuth }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState({});
 
@@ -62,6 +62,11 @@ const Dashboard = () => {
       console.error(err.message);
     }
   }
+
+  const handleLogout = () => {
+    window.localStorage.clear();
+    setAuth(false);
+  };
 
   useEffect(() => {
     fetchUser();
@@ -152,25 +157,21 @@ const Dashboard = () => {
                 </nav>
               </div>
               <div tw="flex-shrink-0 flex border-t border-gray-200 p-4">
-                <a href="#" tw="flex-shrink-0 block" className="group">
-                  <div tw="flex items-center">
-                    <div>
-                      <img
-                        tw="inline-block h-10 w-10 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </div>
+                <button tw="flex-shrink-0 block">
+                  <div tw="text-left">
                     <div tw="ml-3">
-                      <p tw="text-base font-medium text-gray-700 group-hover:text-gray-900">
+                      <p tw="text-base font-medium text-gray-700">
                         {user.name}
                       </p>
-                      <p tw="text-sm font-medium text-gray-500 group-hover:text-pink-700">
-                        View profile
-                      </p>
+                      <button
+                        onClick={handleLogout}
+                        tw="text-xs font-medium text-gray-500 hover:text-pink-700"
+                      >
+                        Logout
+                      </button>
                     </div>
                   </div>
-                </a>
+                </button>
               </div>
             </div>
           </Transition.Child>
@@ -218,25 +219,15 @@ const Dashboard = () => {
               </nav>
             </div>
             <div tw="flex-shrink-0 flex border-t border-gray-200 p-4">
-              <a href="#" tw="flex-shrink-0 w-full block" className="group">
-                <div tw="flex items-center">
-                  <div>
-                    <img
-                      tw="inline-block h-9 w-9 rounded-full"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
-                  </div>
-                  <div tw="ml-3">
-                    <p tw="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                      {user.name}
-                    </p>
-                    <p tw="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-                      Logout
-                    </p>
-                  </div>
-                </div>
-              </a>
+              <div tw="text-left">
+                <p tw="text-sm font-medium text-gray-700">{user.name}</p>
+                <button
+                  onClick={handleLogout}
+                  tw="text-xs font-medium text-gray-500 hover:text-pink-700"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </div>
