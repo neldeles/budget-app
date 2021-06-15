@@ -25,10 +25,17 @@ const Register = ({ setAuth }) => {
 
       const response = await registerService(data);
 
-      console.log(response);
       nameClearState();
       passwordClearState();
       emailClearState();
+
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+
+        setAuth(true);
+      } else {
+        setAuth(false);
+      }
     } catch (err) {
       console.error("error", err.message);
     }

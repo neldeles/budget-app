@@ -25,27 +25,31 @@ const Table = ({ cols, data }) => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, itemIdx) => (
-                  <tr
-                    key={item.id}
-                    css={[itemIdx % 2 === 0 ? tw`bg-white` : tw`bg-gray-50`]}
-                  >
-                    {cols.map((col) => (
-                      <td
-                        key={item[col]}
-                        tw="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                      >
-                        {item[col]}
-                      </td>
-                    ))}
+                {data.map((item, itemIdx) => {
+                  return (
+                    <tr
+                      key={item.id}
+                      css={[itemIdx % 2 === 0 ? tw`bg-white` : tw`bg-gray-50`]}
+                    >
+                      {cols.map((col) => {
+                        return (
+                          <td
+                            key={col}
+                            tw="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                          >
+                            {item[col]}
+                          </td>
+                        );
+                      })}
 
-                    <td tw="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a href="#" tw="text-indigo-600 hover:text-indigo-900">
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                      <td tw="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <a href="#" tw="text-indigo-600 hover:text-indigo-900">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
