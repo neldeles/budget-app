@@ -15,7 +15,7 @@ import dashboardService from "../services/dashboard";
 
 // Components
 import Header from "../components/Header";
-import Table from "../components/Table";
+import BudgetTableContainer from "../components/BudgetTableContainer";
 
 const navigation = [
   { name: "Budget", href: "#", icon: HomeIcon, current: true },
@@ -28,21 +28,24 @@ const data = [
     category: "Electricity",
     budgeted: 0,
     activity: 0,
-    availalble: 0,
+    available: 0,
+    category_group_name: "Immediate Obligations",
     id: 1,
   },
   {
     category: "Electricity",
     budgeted: 0,
     activity: 0,
-    availalble: 0,
+    available: 0,
+    category_group_name: "Immediate Obligations",
     id: 2,
   },
   {
     category: "Electricity",
     budgeted: 0,
     activity: 0,
-    availalble: 0,
+    available: 0,
+    category_group_name: "True Expenses",
     id: 3,
   },
 ];
@@ -246,10 +249,7 @@ const Dashboard = ({ setAuth }) => {
           <div tw="py-6">
             <Header />
             <div tw="max-w-7xl mx-auto px-4 my-4 sm:px-6 md:px-8">
-              <Table
-                cols={["category", "budgeted", "activity", "available"]}
-                data={data}
-              />
+              <BudgetTableContainer data={data} />
             </div>
           </div>
         </main>
