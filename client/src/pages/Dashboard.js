@@ -14,8 +14,8 @@ import tw from "twin.macro";
 import dashboardService from "../services/dashboard";
 
 // Components
-import Header from "./Header";
-import Table from "./Table";
+import Header from "../components/Header";
+import Table from "../components/Table";
 
 const navigation = [
   { name: "Budget", href: "#", icon: HomeIcon, current: true },
