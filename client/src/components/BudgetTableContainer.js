@@ -1,17 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import tw from "twin.macro";
+import { useSelector } from "react-redux";
 
 import Table from "./BudgetTable";
 
-const TableContainer = ({ data }) => {
-  const categoryGroups = data.map((item) => item["category_group_name"]);
-  const uniqueCategoryGroups = [...new Set(categoryGroups)];
+const BudgetTableContainer = () => {
+  const { budget, categoryGroup } = useSelector((state) => state);
+
+  const uniqueCategoryGroups = categoryGroup.map((cat) => cat.name);
 
   return (
     <div>
       {uniqueCategoryGroups.map((catGrp) => {
-        const filteredData = data.filter(
-          (entry) => entry["category_group_name"] === catGrp
+        const filteredData = budget.filter(
+          (entry) => entry["categoryGroupName"] === catGrp
         );
         return <Table key={catGrp} data={filteredData} tableName={catGrp} />;
       })}
@@ -19,4 +21,4 @@ const TableContainer = ({ data }) => {
   );
 };
 
-export default TableContainer;
+export default BudgetTableContainer;

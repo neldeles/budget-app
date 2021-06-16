@@ -11,13 +11,13 @@ router.get("/", authorization, async (req, res) => {
         c.name as category, 
         budgeted_amount, 
         cg.name as category_group 
-        from categories as c 
-        left join category_groups as cg on c.category_group_id = cg.id 
-        where c.user_id = $1`,
+        from category_groups as cg 
+        inner join categories as c on c.category_group_id = cg.id 
+        where cg.user_id = $1`,
       [req.user]
     );
 
-    res.json(budget.rows[0]);
+    res.json(budget.rows);
   } catch (err) {
     console.error(err.message);
     res.status(500).json("server error");

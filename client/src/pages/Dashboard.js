@@ -9,6 +9,7 @@ import {
   XIcon,
 } from "@heroicons/react/outline";
 import tw from "twin.macro";
+import { useDispatch } from "react-redux";
 
 // Services
 import dashboardService from "../services/dashboard";
@@ -17,42 +18,21 @@ import dashboardService from "../services/dashboard";
 import Header from "../components/Header";
 import BudgetTableContainer from "../components/BudgetTableContainer";
 
+// Reducers
+import { initializeBudget } from "../reducers/budgetReducer";
+import { initializeCategoryGroup } from "../reducers/categoryGroupReducer";
+
 const navigation = [
   { name: "Budget", href: "#", icon: HomeIcon, current: true },
   { name: "Reports", href: "#", icon: ChartBarIcon, current: false },
   { name: "Wallets", href: "#", icon: FolderIcon, current: false },
 ];
 
-const data = [
-  {
-    category: "Electricity",
-    budgeted: 0,
-    activity: 0,
-    available: 0,
-    category_group_name: "Immediate Obligations",
-    id: 1,
-  },
-  {
-    category: "Electricity",
-    budgeted: 0,
-    activity: 0,
-    available: 0,
-    category_group_name: "Immediate Obligations",
-    id: 2,
-  },
-  {
-    category: "Electricity",
-    budgeted: 0,
-    activity: 0,
-    available: 0,
-    category_group_name: "True Expenses",
-    id: 3,
-  },
-];
-
 const Dashboard = ({ setAuth }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState({});
+
+  const dispatch = useDispatch();
 
   async function fetchUser() {
     try {
@@ -73,7 +53,9 @@ const Dashboard = ({ setAuth }) => {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+    dispatch(initializeCategoryGroup());
+    dispatch(initializeBudget());
+  }, [dispatch]);
 
   return (
     <div tw="h-screen flex overflow-hidden bg-gray-100">
@@ -249,7 +231,7 @@ const Dashboard = ({ setAuth }) => {
           <div tw="py-6">
             <Header />
             <div tw="max-w-7xl mx-auto px-4 my-4 sm:px-6 md:px-8">
-              <BudgetTableContainer data={data} />
+              <BudgetTableContainer />
             </div>
           </div>
         </main>

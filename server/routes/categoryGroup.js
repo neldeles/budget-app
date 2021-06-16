@@ -5,27 +5,31 @@ const authorization = require("../middleware/authorization");
 
 router.post("/create", authorization, async (req, res) => {
   try {
-    const { user_id, name } = req.body;
-
-    // reject if category group already exists
-    const hasCatGrp = await pool.query(
-      "select * from category_group where name = $1",
-      [name]
-    );
-
-    if (hasCatGrp.rows.length !== 0) {
-      return res.status(401).json("Category group name already exists.");
-    }
+    const { name } = req.body;
 
     // create category group
     const catGrp = await pool.query(
-      "insert into category_group (name) values ($1) returning *",
-      [name]
+      "insert into category_groups (name, user_id) values ($1, $2) returning *",
+      [name, req.user]
     );
 
-    console.log(catGrp);
+    res.json(catGrp.rows[0]);
   } catch (err) {
     console.error(err.message);
+    res.status(500).json("server error");
+  }
+});
+
+// get unique (id, categoryGroupName) pairs for the user
+router.get("/uniqueGroups", authorization, async (req, res) => {
+  try {
+    const unique = await pool.query(
+      "select distinct id, name from (select id, name from category_groups where user_id = $1) as z",
+      [req.user]
+    );
+    res.json(unique.rows);
+  } catch (err) {
+    console.error("uniqueGroups", err.message);
     res.status(500).json("server error");
   }
 });
