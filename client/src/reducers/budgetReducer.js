@@ -12,7 +12,7 @@ const budgetReducer = (state = [], action) => {
           budgeted: datum["budgeted_amount"],
           // TODO: change activity and available to functions
           activity: 0,
-          availalble: 0,
+          available: 0,
         };
         return output;
       });
