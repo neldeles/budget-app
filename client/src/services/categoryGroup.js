@@ -12,4 +12,6 @@ const getUnique = async (config) => {
   return response.data;
 };
 
-export default { create, getUnique };
+const categoryGroup = { create, getUnique };
+
+export default categoryGroup;

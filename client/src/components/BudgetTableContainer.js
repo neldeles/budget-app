@@ -2,7 +2,7 @@
 import tw from "twin.macro";
 import { useSelector } from "react-redux";
 
-import Table from "./BudgetTable";
+import BudgetTable from "./BudgetTable";
 
 const BudgetTableContainer = () => {
   const { budget, categoryGroup } = useSelector((state) => state);
@@ -15,7 +15,9 @@ const BudgetTableContainer = () => {
         const filteredData = budget.filter(
           (entry) => entry["categoryGroupName"] === catGrp
         );
-        return <Table key={catGrp} data={filteredData} tableName={catGrp} />;
+        return (
+          <BudgetTable key={catGrp} data={filteredData} tableName={catGrp} />
+        );
       })}
     </div>
   );

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import tw from "twin.macro";
 
-const Table = ({ data, tableName }) => {
+const BudgetTable = ({ data, tableName }) => {
   const cols = ["category", "budgeted", "activity", "available"];
   return (
     <div tw="flex flex-col mb-12">
@@ -94,4 +94,4 @@ const Table = ({ data, tableName }) => {
   );
 };
 
-export default Table;
+export default BudgetTable;

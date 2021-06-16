@@ -1,34 +1,36 @@
 /** @jsxImportSource @emotion/react */
 import "twin.macro";
-
 import { useField } from "../hooks";
+import { useDispatch } from "react-redux";
 
-import categoryGroupService from "../services/categoryGroup";
+// Reducers
+import { createCategoryGroup } from "../reducers/categoryGroupReducer";
 
 const ModalForm = ({ header, showModal, setShowModal }) => {
   const categoryGroup = useField("categoryGroup", "text");
+  const dispatch = useDispatch();
 
   const { clearState, ...categoryGroupFieldProps } = categoryGroup;
 
   const createCatGroup = async (e) => {
     e.preventDefault();
     try {
-      const config = {
-        headers: { token: localStorage.token },
-      };
-
-      const data = {
+      const content = {
         name: categoryGroup.value,
       };
 
-      const response = await categoryGroupService.create(data, config);
-
-      console.log(response);
+      dispatch(createCategoryGroup(content));
 
       clearState();
+      setShowModal();
     } catch (err) {
       console.error("modalForm", err.message);
     }
+  };
+
+  const handleCancel = () => {
+    clearState();
+    setShowModal();
   };
 
   return (
@@ -46,12 +48,13 @@ const ModalForm = ({ header, showModal, setShowModal }) => {
                   {...categoryGroupFieldProps}
                   tw="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                   placeholder=""
+                  required
                 />
               </div>
               <button
                 type="cancel"
                 tw="mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                onClick={() => setShowModal()}
+                onClick={handleCancel}
               >
                 Cancel
               </button>
