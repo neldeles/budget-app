@@ -1,8 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import tw from "twin.macro";
+import { useTable } from "react-table";
 
-const BudgetTable = ({ data, tableName }) => {
-  const cols = ["category", "budgeted", "activity", "available"];
+const BudgetTable = ({ columns, data, tableName }) => {
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({
+      columns,
+      data,
+    });
+
   return (
     <div tw="flex flex-col mb-12">
       <div tw="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -11,9 +17,24 @@ const BudgetTable = ({ data, tableName }) => {
             {tableName}
           </h3>
           <div tw="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table tw="min-w-full divide-y divide-gray-200">
-              <thead tw="bg-gray-50">
-                <tr>
+            <table
+              {...getTableProps()}
+              tw="min-w-full bg-gray-50 divide-y divide-gray-200"
+            >
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        {...column.getHeaderProps()}
+                        tw="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                      >
+                        {column.render("Header")}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+                {/* <tr>
                   <th
                     scope="col"
                     tw="px-6 py-3 text-left items-center inline-flex text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -36,31 +57,34 @@ const BudgetTable = ({ data, tableName }) => {
                       </svg>
                     </button>
                   </th>
-                  <th
-                    scope="col"
-                    tw="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    budgeted
-                  </th>
-                  <th
-                    scope="col"
-                    tw="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    activity
-                  </th>
-                  <th
-                    scope="col"
-                    tw="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    available
-                  </th>
+
                   <th scope="col" tw="relative px-6 py-3">
                     <span tw="sr-only">Edit</span>
                   </th>
-                </tr>
+                </tr> */}
               </thead>
-              <tbody>
-                {data.map((item, itemIdx) => {
+              <tbody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr
+                      {...row.getRowProps()}
+                      css={[row.id % 2 === 0 ? tw`bg-white` : tw`bg-gray-50`]}
+                    >
+                      {row.cells.map((cell) => {
+                        return (
+                          <td
+                            {...cell.getCellProps()}
+                            tw="px-6 py-4 whitespace-nowrap text-sm font-normal text-gray-900"
+                          >
+                            {cell.render("Cell")}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+                {/* {data.map((item, itemIdx) => {
                   return (
                     <tr
                       key={item.id}
@@ -84,7 +108,7 @@ const BudgetTable = ({ data, tableName }) => {
                       </td>
                     </tr>
                   );
-                })}
+                })} */}
               </tbody>
             </table>
           </div>

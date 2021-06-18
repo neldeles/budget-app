@@ -7,4 +7,6 @@ const getAll = async (config) => {
   return response.data;
 };
 
-export default { getAll };
+const budget = { getAll };
+
+export default budget;
