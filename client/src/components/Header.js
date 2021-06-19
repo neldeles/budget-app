@@ -4,7 +4,7 @@ import tw from "twin.macro";
 
 // components
 import DatePicker from "./DatePicker";
-import ModalForm from "./ModalForm";
+import PopupForm from "./PopupForm";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
@@ -46,7 +46,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <ModalForm
+      <PopupForm
         header="Create Category Group"
         showModal={showModal}
         setShowModal={setShowModal}

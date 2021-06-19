@@ -1,4 +1,5 @@
 import budgetService from "../services/budget";
+import { generateTokenConfig } from "../utilities";
 
 const budgetReducer = (state = [], action) => {
   switch (action.type) {
@@ -25,10 +26,7 @@ const budgetReducer = (state = [], action) => {
 
 export const initializeBudget = () => {
   return async (dispatch) => {
-    const config = {
-      headers: { token: localStorage.token },
-    };
-    const data = await budgetService.getAll(config);
+    const data = await budgetService.getAll(generateTokenConfig());
     dispatch({
       type: "INIT_BUDGET",
       data,

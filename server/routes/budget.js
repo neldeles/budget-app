@@ -5,6 +5,7 @@ const authorization = require("../middleware/authorization");
 
 router.get("/", authorization, async (req, res) => {
   try {
+    // TODO: filter transactions based on date key
     const budget = await pool.query(
       `select 
         c.id as category_id, 

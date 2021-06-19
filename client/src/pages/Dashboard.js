@@ -9,18 +9,14 @@ import {
   XIcon,
 } from "@heroicons/react/outline";
 import tw from "twin.macro";
-import { useDispatch } from "react-redux";
-
-// Services
-import dashboardService from "../services/dashboard";
+import { useDispatch, useSelector } from "react-redux";
 
 // Components
 import Header from "../components/Header";
 import BudgetTableContainer from "../components/BudgetTableContainer";
 
 // Reducers
-import { initializeBudget } from "../reducers/budgetReducer";
-import { initializeCategoryGroup } from "../reducers/categoryGroupReducer";
+import { initializeDashboard } from "../reducers/dashboardReducer";
 
 const navigation = [
   { name: "Budget", href: "#", icon: HomeIcon, current: true },
@@ -30,21 +26,10 @@ const navigation = [
 
 const Dashboard = ({ setAuth }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [user, setUser] = useState({});
+
+  const user = useSelector((state) => state.dashboard.user);
 
   const dispatch = useDispatch();
-
-  async function fetchUser() {
-    try {
-      const config = {
-        headers: { token: localStorage.token },
-      };
-      const response = await dashboardService(config);
-      setUser(response);
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
 
   const handleLogout = () => {
     window.localStorage.clear();
@@ -52,9 +37,7 @@ const Dashboard = ({ setAuth }) => {
   };
 
   useEffect(() => {
-    fetchUser();
-    dispatch(initializeCategoryGroup());
-    dispatch(initializeBudget());
+    dispatch(initializeDashboard());
   }, [dispatch]);
 
   return (

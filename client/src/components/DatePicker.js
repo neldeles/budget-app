@@ -3,30 +3,38 @@ import { useState } from "react";
 import tw from "twin.macro";
 import "react-datetime/css/react-datetime.css";
 import Datetime from "react-datetime";
+import { useDispatch, useSelector } from "react-redux";
+
+// Reducers
+import { updateDashboardDate } from "../reducers/dashboardReducer";
+
+// Selectors
+import { selectDashboardDate } from "../reducers/dashboardReducer";
 
 const moment = require("moment");
 
 const DatePicker = () => {
-  const [date, setDate] = useState(moment());
-  const handleChange = (obj) => {
-    setDate(obj);
-  };
+  const currDate = useSelector(selectDashboardDate);
 
-  console.log(date);
+  const dispatch = useDispatch();
+
+  const handleChange = (obj) => {
+    dispatch(updateDashboardDate);
+  };
 
   const renderInput = (props, openCalendar) => {
     const navigatePrevMonth = () => {
       const currMonth = props.value;
       const prevMonth = moment(currMonth, "MMM YYYY").subtract(1, "months");
 
-      setDate(prevMonth);
+      dispatch(updateDashboardDate(prevMonth));
     };
 
     const navigateNextMonth = () => {
       const currMonth = props.value;
       const nextMonth = moment(currMonth, "MMM YYYY").add(1, "months");
 
-      setDate(nextMonth);
+      dispatch(updateDashboardDate(nextMonth));
     };
 
     return (
@@ -102,7 +110,7 @@ const DatePicker = () => {
       <Datetime
         dateFormat="MMM YYYY"
         timeFormat={false}
-        value={date}
+        value={currDate}
         renderInput={renderInput}
         onChange={handleChange}
         closeOnSelect={true}

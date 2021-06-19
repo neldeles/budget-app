@@ -8,10 +8,12 @@ import { PlusIcon as PlusIconOutline } from "@heroicons/react/outline";
 
 import BudgetTable from "./BudgetTable";
 
-const BudgetTableContainer = () => {
-  const { budget, categoryGroup } = useSelector((state) => state);
+import { selectCategoryGroupName } from "../reducers/categoryGroupReducer";
 
-  const uniqueCategoryGroups = categoryGroup.map((cat) => cat.name);
+const BudgetTableContainer = () => {
+  const budget = useSelector((state) => state.budget);
+
+  const uniqueCategoryGroups = useSelector(selectCategoryGroupName);
   const budgetMemoized = useMemo(() => budget, [budget]);
 
   const columns = useMemo(

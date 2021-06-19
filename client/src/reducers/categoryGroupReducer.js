@@ -1,3 +1,5 @@
+import { createSelector } from "reselect";
+
 import categoryGroupService from "../services/categoryGroup";
 import { generateTokenConfig } from "../utilities";
 
@@ -39,5 +41,11 @@ export const initializeCategoryGroup = () => {
     });
   };
 };
+
+// Selectors
+export const selectCategoryGroupName = createSelector(
+  (state) => state.categoryGroup,
+  (categoryGroups) => categoryGroups.map((categoryGroup) => categoryGroup.name)
+);
 
 export default categoryGroupReducer;
