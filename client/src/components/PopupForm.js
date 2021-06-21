@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 // Reducers
 import { createCategoryGroup } from "../reducers/categoryGroupReducer";
 
-const ModalForm = ({ header, showModal, setShowModal }) => {
+const PopupForm = ({ header, showModal, setShowModal }) => {
   const categoryGroup = useField("categoryGroup", "text");
   const dispatch = useDispatch();
 
@@ -49,6 +49,7 @@ const ModalForm = ({ header, showModal, setShowModal }) => {
                   tw="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                   placeholder=""
                   required
+                  autoFocus
                 />
               </div>
               <button
@@ -71,4 +72,4 @@ const ModalForm = ({ header, showModal, setShowModal }) => {
     </>
   );
 };
-export default ModalForm;
+export default PopupForm;

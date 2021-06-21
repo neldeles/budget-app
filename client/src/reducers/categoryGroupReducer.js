@@ -45,7 +45,7 @@ export const initializeCategoryGroup = () => {
 // Selectors
 export const selectCategoryGroupName = createSelector(
   (state) => state.categoryGroup,
-  (categoryGroups) => categoryGroups.map((categoryGroup) => categoryGroup.name)
+  (categoryGroups) => categoryGroups.map((categoryGroup) => categoryGroup)
 );
 
 export default categoryGroupReducer;

@@ -13,6 +13,7 @@ import Register from "./components/Register";
 
 // Services
 import verifyService from "./services/verify";
+import ModalForm from "./components/ModalForm";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -75,6 +76,9 @@ function App() {
               )
             }
           />
+          <Route path="/form">
+            <ModalForm />
+          </Route>
           <Route
             exact
             path="/"
