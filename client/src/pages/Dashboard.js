@@ -9,13 +9,14 @@ import {
   XIcon,
 } from "@heroicons/react/outline";
 import tw from "twin.macro";
-
-// Services
-import dashboardService from "../services/dashboard";
+import { useDispatch, useSelector } from "react-redux";
 
 // Components
-import Header from "./Header";
-import Table from "./Table";
+import Header from "../components/Header";
+import BudgetTableContainer from "../components/BudgetTableContainer";
+
+// Reducers
+import { initializeDashboard } from "../reducers/dashboardReducer";
 
 const navigation = [
   { name: "Budget", href: "#", icon: HomeIcon, current: true },
@@ -23,45 +24,12 @@ const navigation = [
   { name: "Wallets", href: "#", icon: FolderIcon, current: false },
 ];
 
-const data = [
-  {
-    category: "Electricity",
-    budgeted: 0,
-    activity: 0,
-    availalble: 0,
-    id: 1,
-  },
-  {
-    category: "Electricity",
-    budgeted: 0,
-    activity: 0,
-    availalble: 0,
-    id: 2,
-  },
-  {
-    category: "Electricity",
-    budgeted: 0,
-    activity: 0,
-    availalble: 0,
-    id: 3,
-  },
-];
-
 const Dashboard = ({ setAuth }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [user, setUser] = useState({});
 
-  async function fetchUser() {
-    try {
-      const config = {
-        headers: { token: localStorage.token },
-      };
-      const response = await dashboardService(config);
-      setUser(response);
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
+  const user = useSelector((state) => state.dashboard.user);
+
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     window.localStorage.clear();
@@ -69,8 +37,8 @@ const Dashboard = ({ setAuth }) => {
   };
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    dispatch(initializeDashboard());
+  }, [dispatch]);
 
   return (
     <div tw="h-screen flex overflow-hidden bg-gray-100">
@@ -246,10 +214,7 @@ const Dashboard = ({ setAuth }) => {
           <div tw="py-6">
             <Header />
             <div tw="max-w-7xl mx-auto px-4 my-4 sm:px-6 md:px-8">
-              <Table
-                cols={["category", "budgeted", "activity", "available"]}
-                data={data}
-              />
+              <BudgetTableContainer />
             </div>
           </div>
         </main>

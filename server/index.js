@@ -18,6 +18,12 @@ app.use("/dashboard", require("./routes/dashboard"));
 // budget route
 app.use("/budget", require("./routes/budget"));
 
+// categories route
+app.use("/category", require("./routes/category"));
+
+// category groups route
+app.use("/categorygroup", require("./routes/categoryGroup"));
+
 app.listen(5000, () => {
   console.log("server is running on port 5000");
 });
