@@ -1,64 +1,87 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, useImperativeHandle } from "react";
+import { useMemo, useState } from "react";
 import tw from "twin.macro";
 import { useTable } from "react-table";
+import { PlusIcon as PlusIconSolid } from "@heroicons/react/solid";
 
-import ModalForm from "./ModalForm";
+const BudgetTable = ({ data, tableName, categoryGroupId, handleModal }) => {
+  const [categoryGroup, setCategoryGroup] = useState(categoryGroupId);
 
-const BudgetTable = React.forwardRef(
-  ({ columns, data, tableName, categoryGroupId }, ref) => {
-    const [open, setOpen] = useState(false);
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-      useTable({
-        columns,
-        data,
-      });
+  const columns = useMemo(
+    () => [
+      {
+        Header: (props) => {
+          console.log("header props", props);
+          return (
+            <div tw="inline-flex items-center">
+              <span>category</span>
+              <button
+                css={[
+                  tw`inline-flex items-center ml-2 padding[0.1rem]`,
+                  tw`border border-transparent rounded-full shadow-sm text-white bg-gray-400`,
+                  tw`hover:bg-green-400`,
+                  tw`active:(outline-none ring-2 ring-offset-2 ring-green-500 bg-green-400)`,
+                  tw`focus-visible:(outline-none ring-2 ring-offset-2 ring-green-500)`,
+                  tw`focus:(outline-none)`,
+                ]}
+                onClick={() => handleModal(categoryGroup)}
+              >
+                <PlusIconSolid tw="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+          );
+        },
+        accessor: "category",
+      },
+      {
+        Header: "budgeted",
+        accessor: "budgeted",
+      },
+      {
+        Header: "activity",
+        accessor: "activity",
+      },
+      {
+        Header: "available",
+        accessor: "available",
+      },
+    ],
+    [categoryGroup, handleModal]
+  );
 
-    const toggleVisibility = () => {
-      setOpen(!open);
-    };
-
-    useImperativeHandle(ref, () => {
-      return {
-        toggleVisibility,
-      };
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({
+      columns,
+      data,
     });
 
-    return (
-      <>
-        <ModalForm
-          open={open}
-          setOpen={setOpen}
-          categoryGroupId={categoryGroupId}
-          title="Create Category"
-          confirmButtonValue="Submit"
-          isPositive
-        />
-        <div tw="flex flex-col mb-12">
-          <div tw="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div tw="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-              <h3 tw="text-lg leading-6 font-medium text-gray-900 mb-6">
-                {tableName}
-              </h3>
-              <div tw="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <table
-                  {...getTableProps()}
-                  tw="min-w-full bg-gray-50 divide-y divide-gray-200"
-                >
-                  <thead>
-                    {headerGroups.map((headerGroup) => (
-                      <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                          <th
-                            {...column.getHeaderProps()}
-                            tw="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
-                          >
-                            {column.render("Header")}
-                          </th>
-                        ))}
-                      </tr>
-                    ))}
-                    {/* <tr>
+  return (
+    <>
+      <div tw="flex flex-col mb-12">
+        <div tw="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div tw="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <h3 tw="text-lg leading-6 font-medium text-gray-900 mb-6">
+              {tableName}
+            </h3>
+            <div tw="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table
+                {...getTableProps()}
+                tw="min-w-full bg-gray-50 divide-y divide-gray-200"
+              >
+                <thead>
+                  {headerGroups.map((headerGroup) => (
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column) => (
+                        <th
+                          {...column.getHeaderProps()}
+                          tw="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                        >
+                          {column.render("Header")}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                  {/* <tr>
                   <th
                     scope="col"
                     tw="px-6 py-3 text-left items-center inline-flex text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -86,31 +109,29 @@ const BudgetTable = React.forwardRef(
                     <span tw="sr-only">Edit</span>
                   </th>
                 </tr> */}
-                  </thead>
-                  <tbody {...getTableBodyProps()}>
-                    {rows.map((row) => {
-                      prepareRow(row);
-                      return (
-                        <tr
-                          {...row.getRowProps()}
-                          css={[
-                            row.id % 2 === 0 ? tw`bg-white` : tw`bg-gray-50`,
-                          ]}
-                        >
-                          {row.cells.map((cell) => {
-                            return (
-                              <td
-                                {...cell.getCellProps()}
-                                tw="px-6 py-4 whitespace-nowrap text-sm font-normal text-gray-900"
-                              >
-                                {cell.render("Cell")}
-                              </td>
-                            );
-                          })}
-                        </tr>
-                      );
-                    })}
-                    {/* {data.map((item, itemIdx) => {
+                </thead>
+                <tbody {...getTableBodyProps()}>
+                  {rows.map((row) => {
+                    prepareRow(row);
+                    return (
+                      <tr
+                        {...row.getRowProps()}
+                        css={[row.id % 2 === 0 ? tw`bg-white` : tw`bg-gray-50`]}
+                      >
+                        {row.cells.map((cell) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              tw="px-6 py-4 whitespace-nowrap text-sm font-normal text-gray-900"
+                            >
+                              {cell.render("Cell")}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
+                  {/* {data.map((item, itemIdx) => {
                   return (
                     <tr
                       key={item.id}
@@ -135,15 +156,14 @@ const BudgetTable = React.forwardRef(
                     </tr>
                   );
                 })} */}
-                  </tbody>
-                </table>
-              </div>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-      </>
-    );
-  }
-);
+      </div>
+    </>
+  );
+};
 
 export default BudgetTable;
