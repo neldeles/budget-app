@@ -3,26 +3,33 @@ import categoryService from "../services/category";
 
 import { generateTokenConfig } from "../utilities";
 
+// transform budget payload
+const transformBudget = (obj) => {
+  return {
+    id: obj["id"],
+    category: obj["name"],
+    categoryGroupId: obj["category_group_id"],
+    categoryGroupName: obj["category_group_name"],
+    budgeted: obj["budgeted_amount"],
+    // TODO: change activity and available to functions
+    activity: 0,
+    available: 0,
+  };
+};
+
 const budgetReducer = (state = [], action) => {
   switch (action.type) {
     case "INIT_BUDGET": {
       const data = action.payload;
       const initState = data.map((datum) => {
-        const output = {
-          id: datum["category_id"],
-          category: datum["category"],
-          categoryGroupName: datum["category_group"],
-          budgeted: datum["budgeted_amount"],
-          // TODO: change activity and available to functions
-          activity: 0,
-          available: 0,
-        };
+        const output = transformBudget(datum);
         return output;
       });
       return initState;
     }
     case "ADD_CATEGORY_NAME": {
-      return state;
+      const output = transformBudget(action.payload);
+      return state.concat(output);
     }
     default:
       return state;

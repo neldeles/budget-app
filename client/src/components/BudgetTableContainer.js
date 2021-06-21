@@ -3,6 +3,7 @@ import tw from "twin.macro";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
+import { PlusIcon as PlusIconSolid } from "@heroicons/react/solid";
 import { PlusIcon as PlusIconOutline } from "@heroicons/react/outline";
 
 // Components
@@ -22,6 +23,47 @@ const BudgetTableContainer = () => {
 
   const budgetMemoized = useMemo(() => budget, [budget]);
 
+  const columns = useMemo(
+    () => [
+      {
+        Header: (props) => {
+          return (
+            <div tw="inline-flex items-center">
+              <span>category</span>
+              <button
+                css={[
+                  tw`inline-flex items-center ml-2 padding[0.1rem]`,
+                  tw`border border-transparent rounded-full shadow-sm text-white bg-gray-400`,
+                  tw`hover:bg-green-400`,
+                  tw`active:(outline-none ring-2 ring-offset-2 ring-green-500 bg-green-400)`,
+                  tw`focus-visible:(outline-none ring-2 ring-offset-2 ring-green-500)`,
+                  tw`focus:(outline-none)`,
+                ]}
+                onClick={() => handleModal(props.initialState)}
+              >
+                <PlusIconSolid tw="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+          );
+        },
+        accessor: "category",
+      },
+      {
+        Header: "budgeted",
+        accessor: "budgeted",
+      },
+      {
+        Header: "activity",
+        accessor: "activity",
+      },
+      {
+        Header: "available",
+        accessor: "available",
+      },
+    ],
+    []
+  );
+
   const handleModal = (categoryGroupId) => {
     setActiveCategoryGroup(categoryGroupId);
     setOpen(true);
@@ -31,15 +73,15 @@ const BudgetTableContainer = () => {
     <div>
       {uniqueCategoryGroups.map((categoryGroup) => {
         const filteredData = budgetMemoized.filter(
-          (entry) => entry["categoryGroupName"] === categoryGroup.name
+          (entry) => entry["categoryGroupId"] === categoryGroup.id
         );
         return (
           <BudgetTable
             key={categoryGroup.id}
             categoryGroupId={categoryGroup.id}
+            columns={columns}
             data={filteredData}
             tableName={categoryGroup.name}
-            handleModal={handleModal}
           />
         );
       })}

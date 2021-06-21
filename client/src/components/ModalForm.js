@@ -30,15 +30,13 @@ const ModalForm = ({
 
   const currDate = useSelector(selectDashboardDate);
 
-  console.log("currDate", currDate);
-  console.log("catgroupid", categoryGroupId);
-
   const handleConfirm = async (e) => {
     e.preventDefault();
     try {
       const payload = {
         name: categoryInput.value,
         date: currDate,
+        category_group_id: categoryGroupId,
       };
       dispatch(addBudgetCategory(payload));
       clearState();

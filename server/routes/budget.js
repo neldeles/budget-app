@@ -8,10 +8,11 @@ router.get("/", authorization, async (req, res) => {
     // TODO: filter transactions based on date key
     const budget = await pool.query(
       `select 
-        c.id as category_id, 
-        c.name as category, 
+        c.id, 
+        c.name as name, 
         budgeted_amount, 
-        cg.name as category_group 
+        cg.id as category_group_id,
+        cg.name as category_group_name 
         from category_groups as cg 
         inner join categories as c on c.category_group_id = cg.id 
         where cg.user_id = $1`,
