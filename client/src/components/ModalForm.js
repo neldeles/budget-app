@@ -113,7 +113,7 @@ const ModalForm = ({
                     <p tw="text-sm text-gray-500">{description}</p>
                   </div>
                 </div>
-                <div tw="mt-1 sm:ml-4 w-3/4">
+                <div tw="mt-1 sm:ml-4 sm:w-3/4">
                   <input
                     ref={inputFieldRef}
                     {...categoryFieldProps}

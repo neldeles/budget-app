@@ -213,7 +213,7 @@ const Dashboard = ({ setAuth }) => {
         <main tw="flex-1 relative z-0 overflow-y-auto focus:outline-none">
           <div tw="py-6">
             <Header />
-            <div tw="max-w-7xl mx-auto px-4 my-4 sm:px-6 md:px-8">
+            <div tw="max-w-7xl mx-auto px-4 my-2 sm:px-6 md:px-8">
               <BudgetTableContainer />
             </div>
           </div>
