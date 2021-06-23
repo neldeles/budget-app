@@ -24,7 +24,7 @@ router.post("/create", authorization, async (req, res) => {
 router.get("/uniqueGroups", authorization, async (req, res) => {
   try {
     const unique = await pool.query(
-      "select distinct id, name from (select id, name from category_groups where user_id = $1) as z",
+      "select distinct id, name from (select id, name from category_groups where user_id = $1) as z where name <> 'Inflow'",
       [req.user]
     );
     res.json(unique.rows);

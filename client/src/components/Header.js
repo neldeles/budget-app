@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
 import tw from "twin.macro";
+import { useSelector } from "react-redux";
 
 // components
 import DatePicker from "./DatePicker";
@@ -8,6 +9,7 @@ import PopupForm from "./PopupForm";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
+  const runningBudget = useSelector((state) => state.dashboard.runningBudget);
 
   const setModal = () => {
     setShowModal(!showModal);
@@ -43,9 +45,11 @@ const Header = () => {
             </button>
           </div>
           <div tw="flex justify-end flex-col mr-4 mt-6 sm:mt-2">
-            <h2 tw="text-2xl font-bold leading-7 text-green-600 sm:text-3xl sm:truncate">Php 0.00 </h2>
+            <h2 tw="text-2xl font-bold leading-7 text-green-600 sm:text-3xl sm:truncate">
+              Php {runningBudget}{" "}
+            </h2>
             <p tw="text-sm font-medium text-gray-500 italic text-center">
-            to be budgeted
+              to be budgeted
             </p>
           </div>
         </div>

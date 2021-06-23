@@ -1,7 +1,13 @@
 import { createSelector } from "reselect";
+
+// Services
 import dashboardService from "../services/dashboard";
+import categoryService from "../services/category";
+
+// Utilities
 import { generateTokenConfig } from "../utilities";
 
+// Reducers
 import { initializeCategoryGroup } from "./categoryGroupReducer";
 import { initializeBudget } from "./budgetReducer";
 
@@ -9,7 +15,8 @@ const moment = require("moment");
 
 const initialState = {
   user: { name: null },
-  date: null,
+  currDate: null,
+  runningBudget: parseFloat(0),
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -28,9 +35,14 @@ const dashboardReducer = (state = initialState, action) => {
 export const initializeDashboard = () => {
   return async (dispatch, getState) => {
     const user = await dashboardService.getUser(generateTokenConfig());
+    const currBudget = await categoryService.getCurrentBudget(
+      generateTokenConfig()
+    );
+
     const payload = {
       user,
       currDate: moment(),
+      runningBudget: currBudget,
     };
 
     await Promise.all([
