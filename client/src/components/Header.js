@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
 import tw from "twin.macro";
+import { useSelector } from "react-redux";
 
 // components
 import DatePicker from "./DatePicker";
@@ -8,6 +9,7 @@ import PopupForm from "./PopupForm";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
+  const runningBudget = useSelector((state) => state.dashboard.runningBudget);
 
   const setModal = () => {
     setShowModal(!showModal);
@@ -16,15 +18,13 @@ const Header = () => {
   return (
     <>
       <div tw="bg-gray-100 max-w-7xl mx-auto px-4 py-5 sm:px-6">
-        <div tw="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
-          <div tw="ml-4 mt-4">
+        <div tw="-ml-4 -mt-4 flex justify-center sm:justify-between items-center flex-wrap sm:flex-nowrap">
+          <div tw="mt-4 flex md:mt-0 ml-4">
             {/* <h3 tw="text-lg leading-6 font-medium text-gray-900">Job Postings</h3> */}
             <DatePicker />
-          </div>
-          <div tw="ml-4 mt-4 flex-shrink-0">
             <button
               type="button"
-              tw="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              tw="relative inline-flex items-center ml-4 px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-400 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               onClick={setModal}
             >
               Category Group
@@ -43,6 +43,14 @@ const Header = () => {
                 />
               </svg>
             </button>
+          </div>
+          <div tw="flex justify-end flex-col mr-4 mt-6 sm:mt-2">
+            <h2 tw="text-2xl font-bold leading-7 text-green-600 sm:text-3xl sm:truncate">
+              Php {runningBudget}{" "}
+            </h2>
+            <p tw="text-sm font-medium text-gray-500 italic text-center">
+              to be budgeted
+            </p>
           </div>
         </div>
       </div>

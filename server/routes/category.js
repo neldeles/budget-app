@@ -20,4 +20,19 @@ router.post("/create", authorization, async (req, res) => {
   }
 });
 
+// fetch current month's budget
+router.get("/currentBudget", authorization, async (req, res) => {
+  try {
+    const currBudget = await pool.query(
+      `select sum(budgeted_amount) as running_budgeted_amount from categories where is_default = true and user_id = $1`,
+      [req.user]
+    );
+
+    res.json(currBudget.rows[0].running_budgeted_amount);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json("server error");
+  }
+});
+
 module.exports = router;

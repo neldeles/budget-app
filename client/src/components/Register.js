@@ -3,7 +3,15 @@ import "twin.macro";
 import { Link } from "react-router-dom";
 import { useField } from "../hooks";
 
+// Services
 import registerService from "../services/register";
+import categoryService from '../services/category'
+import categoryGroupService from '../services/categoryGroup'
+
+// Utilities
+import { generateTokenConfig } from "../utilities";
+
+const moment = require("moment");
 
 const Register = ({ setAuth }) => {
   const name = useField("name", "text");
@@ -31,6 +39,19 @@ const Register = ({ setAuth }) => {
 
       if (response.token) {
         localStorage.setItem("token", response.token);
+
+        // create default "to be budgeted category" if registration is successful
+        // its category group is inflow by default
+        const categoryGroupServiceResponse = await categoryGroupService.create({name: "Inflow"}, generateTokenConfig()) 
+        const {id: categoryGroupId} = categoryGroupServiceResponse
+
+        const categoryServiceCreatePayload = {
+          name: "To be budgeted",
+          category_group_id: categoryGroupId,
+          date: moment() 
+        }
+
+        await categoryService.create(categoryServiceCreatePayload, generateTokenConfig())
 
         setAuth(true);
       } else {
